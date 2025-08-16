@@ -107,58 +107,176 @@ def build_html(deck: Dict[str, Any]) -> str:
     slides = deck.get("slides", [])
     theme = deck.get("theme", "minimal")
 
-    # Minimal CSS themes
+    # Enhanced professional CSS themes
     theme_css = {
         "minimal": """
-            body { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin:0; }
-            .deck { height: 100vh; display:flex; align-items:center; justify-content:center; background:#fafafa; color:#111; }
-            .slide { display:none; width: 80vw; height: 80vh; background:#fff; border-radius:16px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding:48px; }
-            h1,h2 { margin:0 0 16px 0; }
-            ul { margin:12px 0 0 18px; }
-            .controls { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); display:flex; gap:8px; }
-            .btn { border:1px solid #ddd; padding:10px 14px; border-radius:10px; cursor:pointer; background:#fff; }
-            .btn:active { transform: translateY(1px); }
-            .notes { margin-top: 16px; padding: 12px; border-left: 4px solid #eee; background:#f7f7f7; display:none; }
-            .header { position: fixed; top: 16px; left: 24px; font-weight: 600; opacity:.7; }
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+            body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin:0; background:#f8fafc; }
+            .deck { height: 100vh; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+            .slide { 
+                display:none; width: 85vw; max-width: 1200px; height: 85vh; background:#ffffff; 
+                border-radius:20px; box-shadow: 0 25px 80px rgba(0,0,0,0.15); padding:80px 100px;
+                position:relative; overflow:hidden;
+            }
+            .slide::before {
+                content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px;
+                background: linear-gradient(90deg, #667eea, #764ba2);
+            }
+            h1 { font-size: 3.5rem; font-weight: 700; color: #1a202c; margin: 0 0 40px 0; line-height: 1.1; }
+            h2 { font-size: 2.8rem; font-weight: 600; color: #2d3748; margin: 0 0 50px 0; line-height: 1.2; }
+            ul { margin: 20px 0; padding-left: 0; list-style: none; }
+            li { 
+                margin: 25px 0; padding: 20px 0 20px 60px; font-size: 1.4rem; line-height: 1.6; 
+                color: #4a5568; position: relative; font-weight: 400;
+                border-left: 4px solid transparent;
+            }
+            li::before {
+                content: '▶'; position: absolute; left: 20px; color: #667eea; font-size: 1.2rem;
+                font-weight: 600;
+            }
+            .controls { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); display:flex; gap:15px; }
+            .btn { 
+                border: 2px solid #e2e8f0; padding: 15px 25px; border-radius: 12px; cursor: pointer; 
+                background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); font-weight: 500;
+                transition: all 0.3s ease; color: #2d3748; font-size: 14px;
+            }
+            .btn:hover { background: #667eea; color: white; border-color: #667eea; transform: translateY(-2px); }
+            .notes { 
+                margin-top: 60px; padding: 30px; background: #f7fafc; border-radius: 12px;
+                border-left: 6px solid #667eea; font-size: 1.1rem; line-height: 1.7; display: none;
+                color: #4a5568;
+            }
+            .header { 
+                position: fixed; top: 40px; left: 60px; font-weight: 600; opacity: 0.8; 
+                font-size: 1.1rem; color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            }
+            .slide-number {
+                position: absolute; top: 40px; right: 60px; background: rgba(255,255,255,0.9);
+                padding: 10px 20px; border-radius: 20px; font-weight: 600; color: #4a5568;
+                backdrop-filter: blur(10px);
+            }
         """,
         "corporate": """
-            body { font-family: Segoe UI, system-ui, -apple-system, Roboto, Arial, sans-serif; margin:0; }
-            .deck { height: 100vh; display:flex; align-items:center; justify-content:center; background:#f0f3f7; color:#1f2d3d; }
-            .slide { display:none; width: 82vw; height: 80vh; background:#fff; border-radius:12px; box-shadow: 0 16px 40px rgba(0,0,0,0.12); padding:52px; border: 1px solid #e6eaf0;}
-            h1,h2 { margin:0 0 16px 0; color:#0f172a; }
-            ul { margin:12px 0 0 18px; }
-            .controls { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); display:flex; gap:8px; }
-            .btn { border:1px solid #cbd5e1; padding:10px 14px; border-radius:10px; cursor:pointer; background:#ffffff; }
-            .btn:active { transform: translateY(1px); }
-            .notes { margin-top: 16px; padding: 12px; border-left: 4px solid #cbd5e1; background:#eef2f7; display:none; }
-            .header { position: fixed; top: 16px; left: 24px; font-weight: 700; opacity:.7; }
+            @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap');
+            body { font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin:0; }
+            .deck { height: 100vh; display:flex; align-items:center; justify-content:center; background:#1a365d; }
+            .slide { 
+                display:none; width: 85vw; max-width: 1200px; height: 85vh; background:#ffffff; 
+                border-radius:8px; box-shadow: 0 30px 100px rgba(0,0,0,0.25); padding:80px 100px;
+                position:relative; border-top: 8px solid #2b6cb0;
+            }
+            .slide::after {
+                content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+                background: linear-gradient(90deg, #2b6cb0, #3182ce);
+            }
+            h1 { font-size: 3.2rem; font-weight: 700; color: #1a202c; margin: 0 0 40px 0; line-height: 1.1; }
+            h2 { font-size: 2.5rem; font-weight: 600; color: #2d3748; margin: 0 0 50px 0; line-height: 1.2; }
+            ul { margin: 25px 0; padding-left: 0; list-style: none; }
+            li { 
+                margin: 30px 0; padding: 25px 0 25px 70px; font-size: 1.3rem; line-height: 1.6; 
+                color: #4a5568; position: relative; font-weight: 400;
+                background: linear-gradient(90deg, #f7fafc 0%, #ffffff 100%);
+                border-radius: 8px; border-left: 5px solid #3182ce;
+            }
+            li::before {
+                content: '●'; position: absolute; left: 30px; color: #2b6cb0; font-size: 1.5rem;
+                font-weight: 900;
+            }
+            .controls { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); display:flex; gap:15px; }
+            .btn { 
+                border: 2px solid #cbd5e1; padding: 15px 25px; border-radius: 6px; cursor: pointer; 
+                background: #ffffff; font-weight: 600; transition: all 0.3s ease;
+                color: #2d3748; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;
+            }
+            .btn:hover { background: #2b6cb0; color: white; border-color: #2b6cb0; }
+            .notes { 
+                margin-top: 60px; padding: 35px; background: #edf2f7; border-radius: 8px;
+                border-left: 8px solid #2b6cb0; font-size: 1.1rem; line-height: 1.7; display: none;
+                color: #4a5568; font-style: italic;
+            }
+            .header { 
+                position: fixed; top: 40px; left: 60px; font-weight: 700; opacity: 0.9; 
+                font-size: 1.2rem; color: white; text-transform: uppercase; letter-spacing: 1px;
+            }
+            .slide-number {
+                position: absolute; top: 40px; right: 60px; background: #2b6cb0;
+                padding: 12px 24px; border-radius: 4px; font-weight: 700; color: white;
+                font-size: 14px; letter-spacing: 0.5px;
+            }
+            .company-logo {
+                position: absolute; bottom: 40px; right: 60px; width: 60px; height: 20px;
+                background: #e2e8f0; border-radius: 4px; opacity: 0.7;
+            }
         """,
         "dark": """
-            body { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin:0; background:#0b0f17; color:#e6e6e6; }
-            .deck { height: 100vh; display:flex; align-items:center; justify-content:center; }
-            .slide { display:none; width: 82vw; height: 80vh; background:#121826; border-radius:16px; box-shadow: 0 16px 40px rgba(0,0,0,0.45); padding:52px; border: 1px solid #1f2a44;}
-            h1,h2 { margin:0 0 16px 0; color:#f5f7fb; }
-            ul { margin:12px 0 0 18px; }
-            .controls { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); display:flex; gap:8px; }
-            .btn { border:1px solid #243049; padding:10px 14px; border-radius:10px; cursor:pointer; background:#0f172a; color:#e6e6e6; }
-            .btn:active { transform: translateY(1px); }
-            .notes { margin-top: 16px; padding: 12px; border-left: 4px solid #243049; background:#0f172a; display:none; }
-            .header { position: fixed; top: 16px; left: 24px; font-weight: 700; opacity:.6; }
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+            body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin:0; background:#0f172a; }
+            .deck { height: 100vh; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg, #1e293b 0%, #0f172a 100%); }
+            .slide { 
+                display:none; width: 85vw; max-width: 1200px; height: 85vh; 
+                background:linear-gradient(145deg, #1e293b 0%, #334155 100%);
+                border-radius:24px; box-shadow: 0 40px 120px rgba(0,0,0,0.6); padding:80px 100px;
+                position:relative; border: 1px solid #334155;
+            }
+            .slide::before {
+                content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px;
+                background: linear-gradient(90deg, #6366f1, #8b5cf6);
+                border-radius: 24px 24px 0 0;
+            }
+            h1 { font-size: 3.5rem; font-weight: 700; color: #f1f5f9; margin: 0 0 40px 0; line-height: 1.1; }
+            h2 { font-size: 2.8rem; font-weight: 600; color: #e2e8f0; margin: 0 0 50px 0; line-height: 1.2; }
+            ul { margin: 25px 0; padding-left: 0; list-style: none; }
+            li { 
+                margin: 30px 0; padding: 25px 0 25px 70px; font-size: 1.4rem; line-height: 1.6; 
+                color: #cbd5e1; position: relative; font-weight: 400;
+                background: rgba(51, 65, 85, 0.3); border-radius: 12px;
+                border-left: 4px solid #6366f1; backdrop-filter: blur(10px);
+            }
+            li::before {
+                content: '◆'; position: absolute; left: 25px; color: #8b5cf6; font-size: 1.3rem;
+                font-weight: 600;
+            }
+            .controls { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); display:flex; gap:15px; }
+            .btn { 
+                border: 2px solid #475569; padding: 15px 25px; border-radius: 12px; cursor: pointer; 
+                background: rgba(30, 41, 59, 0.8); backdrop-filter: blur(10px); font-weight: 500;
+                transition: all 0.3s ease; color: #e2e8f0; font-size: 14px;
+            }
+            .btn:hover { background: #6366f1; color: white; border-color: #6366f1; transform: translateY(-2px); }
+            .notes { 
+                margin-top: 60px; padding: 35px; background: rgba(15, 23, 42, 0.6); border-radius: 12px;
+                border-left: 6px solid #8b5cf6; font-size: 1.1rem; line-height: 1.7; display: none;
+                color: #cbd5e1; backdrop-filter: blur(10px);
+            }
+            .header { 
+                position: fixed; top: 40px; left: 60px; font-weight: 600; opacity: 0.9; 
+                font-size: 1.1rem; color: #e2e8f0;
+            }
+            .slide-number {
+                position: absolute; top: 40px; right: 60px; background: rgba(99, 102, 241, 0.2);
+                padding: 12px 20px; border-radius: 20px; font-weight: 600; color: #e2e8f0;
+                backdrop-filter: blur(10px); border: 1px solid rgba(99, 102, 241, 0.3);
+            }
         """,
     }[theme if theme in ["minimal","corporate","dark"] else "minimal"]
 
-    # Build slides HTML
+    # Build enhanced slides HTML
     slides_html = []
+    total_slides = len(slides)
+    
     for i, s in enumerate(slides, start=1):
         heading = s.get("heading", f"Slide {i}")
         bullets = s.get("bullets", [])
         notes = s.get("notes", "")
         bullets_html = "".join(f"<li>{b}</li>" for b in bullets[:7])
+        
         slide_html = f"""
         <section class="slide" data-idx="{i-1}">
+            <div class="slide-number">{i} / {total_slides}</div>
             <h2>{heading}</h2>
             <ul>{bullets_html}</ul>
-            <div class="notes"><strong>Speaker notes:</strong> {notes}</div>
+            <div class="notes"><strong>Speaker Notes:</strong><br>{notes}</div>
+            <div class="company-logo"></div>
         </section>
         """
         slides_html.append(slide_html)
@@ -172,6 +290,60 @@ def build_html(deck: Dict[str, Any]) -> str:
 <title>{title}</title>
 <style>
 {theme_css}
+
+/* Print-specific styles for PDF generation */
+@media print {{
+    @page {{
+        size: A4 landscape;
+        margin: 0;
+    }}
+    
+    body {{
+        background: white !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }}
+    
+    .deck {{
+        background: transparent !important;
+    }}
+    
+    .slide {{
+        display: block !important;
+        page-break-after: always;
+        page-break-inside: avoid;
+        width: 100vw !important;
+        height: 100vh !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+    }}
+    
+    .slide:last-child {{
+        page-break-after: avoid;
+    }}
+    
+    .controls {{
+        display: none !important;
+    }}
+    
+    .header {{
+        position: absolute !important;
+        color: #333 !important;
+        text-shadow: none !important;
+    }}
+    
+    .slide-number {{
+        background: #f0f0f0 !important;
+        color: #333 !important;
+        backdrop-filter: none !important;
+        border: 1px solid #ddd !important;
+    }}
+    
+    .notes {{
+        display: none !important;
+    }}
+}}
 </style>
 </head>
 <body>
@@ -238,8 +410,14 @@ def generate_deck_json(transcript: str, theme: str, tone: str, n_slides: int, te
     if not client:
         raise RuntimeError("OpenAI client not initialized. Add OPENAI_API_KEY.")
     system = (
-        "You are a slide generator. Convert the user's transcript into a concise slide deck.\n"
-        "RULES: 5–10 slides; each slide has 3–5 bullets and 2–6 sentence speaker notes.\n"
+        "You are an expert presentation designer creating polished, enterprise-grade slide decks.\n"
+        "RULES:\n"
+        "- Create 5–10 professional slides with clear, impactful content\n"
+        "- Each slide should have a compelling headline and 3–5 concise, actionable bullet points\n" 
+        "- Bullet points should be results-focused and use strong action words\n"
+        "- Include detailed 3–5 sentence speaker notes for each slide with key talking points\n"
+        "- Use professional language appropriate for executive presentations\n"
+        "- Structure content logically with clear flow between ideas\n"
         "OUTPUT: JSON matching the schema exactly. No markdown, no commentary."
     )
     schema_hint = """
